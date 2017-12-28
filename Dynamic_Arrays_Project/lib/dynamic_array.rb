@@ -3,18 +3,20 @@ require_relative "static_array"
 class DynamicArray
   attr_reader :length
 
-  def initialize
-    Array.new(5)
+  def initialize(capacity = 8)
+    @store = StaticArray.new(capacity)
+    @count = 0
+  end
+
+  def capacity
+    @store.length
   end
 
   # O(1)
   def [](index)
-    if index > self.length - 1
-      raise ArgumentError.new("index out of bounds")
-    else
-      return self[index]
-    end
+   @store[index]
   end
+
 
   # O(1)
   def []=(index, value)
@@ -22,6 +24,7 @@ class DynamicArray
 
   # O(1)
   def pop
+
   end
 
   # O(1) ammortized; O(n) worst case. Variable because of the possible
@@ -37,11 +40,11 @@ class DynamicArray
   def unshift(val)
   end
 
-  protected
-  attr_accessor :capacity, :store
-  attr_writer :length
 
   def check_index(index)
+    if index > capacity
+      raise Exception.new("index out of bounds")
+    end
   end
 
   # O(n): has to copy over all the elements to the new store.
