@@ -29,18 +29,9 @@ class BinaryMinHeap
 
   public
   def self.child_indices(len, parent_index)
-    indices = []
-
-    if (2 * parent_index) + 2 < len
-      indices << (2 * parent_index) + 1
-      indices << (2 * parent_index) + 2
-    else
-      if (2 * parent_index) + 1 < len
-        indices << (2 * parent_index) + 1
-      end
+    [2 * parent_index + 1, 2 * parent_index + 2].select do |idx|
+      idx < len
     end
-
-    indices
   end
 
 
