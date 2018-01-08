@@ -3,6 +3,8 @@
 require_relative 'bst_node'
 
 class BinarySearchTree
+  attr_accessor :root
+
   def initialize
     @root = nil
   end
@@ -27,7 +29,37 @@ class BinarySearchTree
   end
 
   def delete(value)
+    self.class.delete!(@root, value)
   end
+
+  def self.delete!(node, value)
+    return nil unless node
+
+    if node.value == value
+      return node.right unless node.left
+      return node.left unless node.right
+
+      new_parent = node.right
+      new_parent.right = delete_min!(node.right)
+      new_parent.left = node.left
+      return new_parent
+    elsif value < node.value
+      node.left = delete!(node.left, value)
+    else
+      node.right = delete!(node.right, value)
+    end
+
+    node
+  end
+
+  def self.delete_min!(node)
+    return nil unless node
+    return node.right unless node.left
+
+    node.left = delete_min!(node.left)
+    node
+  end
+
 
   # helper method for #delete:
   def maximum(tree_node = @root)
@@ -40,7 +72,21 @@ class BinarySearchTree
     tree_node
   end
 
+  def minimum(tree_node = @root)
+    return nil unless node
+
+    if node.left
+      return min(node.left)
+    end
+
+    node
+  end
+
   def depth(tree_node = @root)
+    return -1 unless tree_node
+    left = 1 + depth(tree_node.left)
+    right = 1 + depth(tree_node.right)
+    left > right ? left : right
   end 
 
   def is_balanced?(tree_node = @root)
@@ -60,6 +106,7 @@ class BinarySearchTree
 
     node
   end
+
 
   private
   # optional helper methods go here:
