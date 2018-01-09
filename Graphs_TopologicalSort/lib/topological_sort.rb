@@ -13,22 +13,23 @@ def topological_sort(vertices)
   end
 
   res = []
-  while !no_ins.empty?
-    u = no_ins.shift
-    res << u
+  until no_ins.empty?
+    working_vertex = no_ins.shift
+    res << working_vertex
 
-    u.out_edges.each do |edge|
+    working_vertex.out_edges.each do |edge|
       to_vertex = edge.to_vertex
       in_edge_counts[to_vertex] -= 1
       no_ins << to_vertex if in_edge_counts[to_vertex] == 0
     end
   end
 
-  res
+  res.length != vertices.length ? [] : res
+
 end
 
 # Tarjan's
-def topological_sort(vertices)
+def topological_sort2(vertices)
   res = []
   explored = Set.new
 
@@ -38,7 +39,13 @@ def topological_sort(vertices)
     end
   end
 
+  if res.length != vertices.length
+    cyclic = true
+    return []
+  end
+
   res
+
 end
 
 def dfs_visit(vertex, explored, res)
@@ -52,4 +59,5 @@ def dfs_visit(vertex, explored, res)
   end
 
   res.unshift(vertex)
+
 end
