@@ -42,56 +42,56 @@ class RingBuffer {
   // O(1)
   isFull() {
     return this.size === this.capacity();
- }
+  }
 
- peek() {
-   if (this.isEmpty()) {
-     throw new Error('Cannot peek into empty Ring Buffer');
-   } else {
-     return this.elements[this.first];
-   }
- }
+  peek() {
+    if (this.isEmpty()) {
+      throw new Error('Cannot peek into empty Ring Buffer');
+    } else {
+      return this.elements[this.first];
+    }
+  }
 
- peekToPosition(index) {
-   if (index > this.size()) {
-     throw new Error(`Position ${index} does not exist in Ring Buffer of size ${this.size}`);
-   }
+  peekToPosition(index) {
+    if (index > this.size()) {
+      throw new Error(`Position ${index} does not exist in Ring Buffer of size ${this.size}`);
+    }
 
-   const absPosition = Math.min(this.first + index, this.capacity());
+    const absPosition = Math.min(this.first + index, this.capacity());
 
-   const firstHalf = this.elements.slice(this.first, absPosition);
-   const secondHalf = this.elements.slice(0, index - firstHalf.length);
+    const firstHalf = this.elements.slice(this.first, absPosition);
+    const secondHalf = this.elements.slice(0, index - firstHalf.length);
 
-   return absPosition < this.capacity() ? firstHalf : firstHalf + secondHalf;
- }
+    return absPosition < this.capacity() ? firstHalf : firstHalf + secondHalf;
+  }
 
- dequeue() {
-  const dequeuedEl = this.peek();
+  dequeue() {
+    const dequeuedEl = this.peek();
 
-  this.size--;
-  this.first = (this.first + 1) % this.capacity();
+    this.size--;
+    this.first = (this.first + 1) % this.capacity();
 
-  return dequeuedEl;
- }
+    return dequeuedEl;
+  }
 
- dequeueToPosition(index) {
-   const dequeuedEls = this.peekToPosition(index);
+  dequeueToPosition(index) {
+    const dequeuedEls = this.peekToPosition(index);
 
-  this.size -= index;
-  this.first = (this.first + index) % this.capacity();
- }
+    this.size -= index;
+    this.first = (this.first + index) % this.capacity();
+  }
 
- enqueue(element) {
-   this.end = (this.first + this.size()) % this.capacity();
+  enqueue(element) {
+    this.end = (this.first + this.size()) % this.capacity();
 
-   this.elements[this.end] = element;
-   if (this.isFull()) {
-     this.first = (this.first + 1) % this.capacity;
-   } else {
-     this.size++;
-   }
-   return this.size();
- }
+    this.elements[this.end] = element;
+    if (this.isFull()) {
+      this.first = (this.first + 1) % this.capacity;
+    } else {
+      this.size++;
+    }
+    return this.size();
+  }
 
 
 
